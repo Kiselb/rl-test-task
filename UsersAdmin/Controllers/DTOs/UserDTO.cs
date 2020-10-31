@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace UsersAdmin.Controllers.DTOs
 {
@@ -9,5 +10,6 @@ namespace UsersAdmin.Controllers.DTOs
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
+        public List<RoleDTO> Roles { get; set; }
     }
 }

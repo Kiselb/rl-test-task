@@ -8,6 +8,7 @@ namespace UsersAdmin.Models
         public AdminDbContext(DbContextOptions<AdminDbContext> options) : base(options) { }
         public DbSet<User> User { get; set; }
         public DbSet<Role> Role { get; set; }
+        public DbSet<UserRole> UserRole { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,7 +21,6 @@ namespace UsersAdmin.Models
                 user.Property(u => u.Name).IsRequired();
                 user.Property(u => u.Email).IsRequired();
                 user.Property(u => u.Password).IsRequired();
-                //user.HasMany(u => u.Roles).WithOne();
             });
 
             modelBuilder.Entity<Role>(role =>
@@ -28,6 +28,19 @@ namespace UsersAdmin.Models
                 role.HasKey(r => r.Id);
                 role.Property(r => r.Name).IsRequired();
             });
+
+            modelBuilder.Entity<UserRole>()
+                .HasKey(ur => new { ur.UserId, ur.RoleId });
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.User)
+                .WithMany(u => u.UserRole)
+                .HasForeignKey(ur => ur.UserId);
+
+            modelBuilder.Entity<UserRole>()
+                .HasOne(ur => ur.Role)
+                .WithMany(r => r.UserRole)
+                .HasForeignKey(ur => ur.RoleId);
         }
     }
 }

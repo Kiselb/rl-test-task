@@ -32,11 +32,11 @@ namespace UsersAdmin.Controllers
         public async Task<IActionResult> Get(int id)
         {
             var user = await _DbContext.User.FindAsync(id);
-
             if (user == null)
             {
                 return NotFound();
             }
+            user.UserRole = await _DbContext.UserRole.Include(ur => ur.Role).Where(r => r.UserId == id).ToListAsync();
             return Ok(user.ToDTO());
         }
         [HttpPost]
@@ -124,13 +124,16 @@ namespace UsersAdmin.Controllers
 
         public static UserDTO ToDTO(this User user)
         {
+            List<RoleDTO> roles = user.UserRole.Select(r => new RoleDTO { Id = r.RoleId, Name = r.Role.Name }).ToList<RoleDTO>();
+
             return new UserDTO
             {
                 Id = user.Id,
                 Login = user.Login,
                 Name = user.Name,
                 Email = user.Email,
-                Password = user.Password
+                Password = user.Password,
+                Roles = roles
             };
         }        
     }
