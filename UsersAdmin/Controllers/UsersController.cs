@@ -75,7 +75,7 @@ namespace UsersAdmin.Controllers
             }
 
             var userToAdd = userDTO.ToModel();
-            _DbContext.Add(userToAdd);
+            _DbContext.User.Add(userToAdd);
             await _DbContext.SaveChangesAsync();
 
             var createdUserDTO = userToAdd.ToDTO();
@@ -100,7 +100,47 @@ namespace UsersAdmin.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("{id}/Roles")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        public async Task<IActionResult> AddRole(int id, [FromBody] UserRoleDTO userRoleDTO)
+        {
+            if (userRoleDTO.UserId != id)
+                return BadRequest();
+
+            var user = await _DbContext.User.FindAsync(userRoleDTO.UserId);
+            if (user == null)
+                return NotFound();
+
+            var role = await _DbContext.User.FindAsync(userRoleDTO.RoleId);
+            if (user == null)
+                return NotFound();
+
+            var userRole = await _DbContext.UserRole.FindAsync(userRoleDTO.UserId, userRoleDTO.RoleId);
+            if (userRole != null)
+                return Conflict();
+
+            var userRoleToAdd = userRoleDTO.ToModel();
+            _DbContext.UserRole.Add(userRoleToAdd);
+            await _DbContext.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
+    public static class UserRoleExtensions
+    {
+        public static UserRole ToModel(this UserRoleDTO userRoleDTO)
+        {
+            return new UserRole {
+                UserId = userRoleDTO.UserId,
+                RoleId = userRoleDTO.RoleId
+            };
+        }
+    }
+
     public static class UserExtensions
     {
         public static User ToModel(this UserDTO userDTO)
@@ -124,7 +164,11 @@ namespace UsersAdmin.Controllers
 
         public static UserDTO ToDTO(this User user)
         {
-            List<RoleDTO> roles = user.UserRole.Select(r => new RoleDTO { Id = r.RoleId, Name = r.Role.Name }).ToList<RoleDTO>();
+            List<RoleDTO> roles = null;
+            if (user.UserRole != null)
+            {
+                roles = user.UserRole.Select(r => new RoleDTO { Id = r.RoleId, Name = r.Role.Name }).ToList<RoleDTO>();
+            }
 
             return new UserDTO
             {

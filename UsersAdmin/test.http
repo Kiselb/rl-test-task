@@ -4,14 +4,22 @@ GET https://localhost:5001/users HTTP/1.1
 GET https://localhost:5001/users/1 HTTP/1.1
 
 ###
+POST https://localhost:5001/users/1/roles HTTP/1.1
+Content-Type: application/json
+
+{
+    "UserId": 1,
+    "RoleId": 4
+}
+###
 POST https://localhost:5001/users HTTP/1.1
 Content-Type: application/json
 
 {
     "Id": 0,
-    "Login": "User02",
-    "Name": "Ostap Bender",
-    "Email": "ostapbender@ostapbender.ru",
+    "Login": "User04",
+    "Name": "Ivan Sidorov",
+    "Email": "ivansidorov@ivansidorov.ru",
     "Password": "0123456789"
 }
 ###
@@ -37,6 +45,6 @@ Content-Type: application/json
 
 {
     "Id": 0,
-    "Name": "RegularUser"
+    "Name": "Tester"
 }
 ###

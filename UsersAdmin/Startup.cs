@@ -27,6 +27,8 @@ namespace UsersAdmin
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            string connection = Configuration.GetConnectionString("DefaultConnection");
+
             //services.AddControllers();
             services.AddControllers()
                 .AddJsonOptions(options =>
@@ -38,7 +40,7 @@ namespace UsersAdmin
             //     builder.UseInMemoryDatabase("UsersAdmin"),
             //     ServiceLifetime.Singleton);
             services.AddDbContext<AdminDbContext>(builder => 
-                builder.UseSqlServer("Server=nacer.group.legion.ru;Database=rltest;user=webuser;password=wup@ssw0rd"),
+                builder.UseSqlServer(connection),
                 ServiceLifetime.Singleton);
 
         }
