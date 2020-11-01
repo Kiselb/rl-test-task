@@ -4,11 +4,11 @@ GET https://localhost:5001/users HTTP/1.1
 GET https://localhost:5001/users/1 HTTP/1.1
 
 ###
-POST https://localhost:5001/users/1/roles HTTP/1.1
+POST https://localhost:5001/users/2/roles HTTP/1.1
 Content-Type: application/json
 
 {
-    "UserId": 1,
+    "UserId": 2,
     "RoleId": 4
 }
 ###
