@@ -1,4 +1,4 @@
-GET https://localhost:5001/users HTTP/1.1
+GET http://localhost:5000/users HTTP/1.1
 
 ###
 GET https://localhost:5001/users/1 HTTP/1.1

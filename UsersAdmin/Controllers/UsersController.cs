@@ -94,7 +94,8 @@ namespace UsersAdmin.Controllers
             var user = await _DbContext.User.FindAsync(id);
             if (user == null)
                 return NotFound();
-
+            // TODO: Refactor. Password managment is special issue
+            userDTO.Password = user.Password;
             user.Update(userDTO);
             await _DbContext.SaveChangesAsync();
 
