@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using UsersAdmin.Models;
 using UsersAdmin.Controllers.DTOs;
@@ -20,6 +21,7 @@ namespace UsersAdmin.Controllers
             _DbContext = DbContext;
         }
 
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerator<RoleDTO>>> GetAll() {
@@ -27,6 +29,7 @@ namespace UsersAdmin.Controllers
             return Ok(roles.Select(r => r.ToDTO()));
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(RoleDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -40,6 +43,7 @@ namespace UsersAdmin.Controllers
             }
             return Ok(role.ToDTO());
         }
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -93,5 +97,4 @@ namespace UsersAdmin.Controllers
             };
         }        
     }
-
 }

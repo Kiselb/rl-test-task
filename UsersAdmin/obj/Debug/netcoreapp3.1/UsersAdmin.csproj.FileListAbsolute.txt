@@ -59,3 +59,4 @@ D:\EDUCATION\rl-test-task\UsersAdmin\obj\Debug\netcoreapp3.1\staticwebassets\Use
 D:\EDUCATION\rl-test-task\UsersAdmin\obj\Debug\netcoreapp3.1\UsersAdmin.dll
 D:\EDUCATION\rl-test-task\UsersAdmin\obj\Debug\netcoreapp3.1\UsersAdmin.pdb
 D:\EDUCATION\rl-test-task\UsersAdmin\obj\Debug\netcoreapp3.1\UsersAdmin.genruntimeconfig.cache
+D:\EDUCATION\rl-test-task\UsersAdmin\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll

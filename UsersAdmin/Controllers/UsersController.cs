@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using UsersAdmin.Models;
 using UsersAdmin.Controllers.DTOs;
@@ -19,6 +20,7 @@ namespace UsersAdmin.Controllers
         public UsersController(AdminDbContext DbContext) {
             _DbContext = DbContext;
         }
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerator<UserDTO>>> GetAll() {
@@ -26,6 +28,7 @@ namespace UsersAdmin.Controllers
             return Ok(users.Select(u => u.ToDTO()));
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(UserDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -39,6 +42,7 @@ namespace UsersAdmin.Controllers
             user.UserRole = await _DbContext.UserRole.Include(ur => ur.Role).Where(r => r.UserId == id).ToListAsync();
             return Ok(user.ToDTO());
         }
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -82,6 +86,7 @@ namespace UsersAdmin.Controllers
 
             return CreatedAtAction(nameof(Get), new { Id = createdUserDTO.Id }, createdUserDTO);
         }
+        [Authorize]
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -101,7 +106,22 @@ namespace UsersAdmin.Controllers
 
             return NoContent();
         }
-
+        [Authorize]
+        [HttpGet("{id}/Roles")]
+        [ProducesResponseType(typeof(UserRoleDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetRoles(int id)
+        {
+            var user = await _DbContext.User.FindAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            List<UserRole> roles = await _DbContext.UserRole.Include(ur => ur.Role).Where(r => r.UserId == id).ToListAsync();
+            List<RoleDTO> rolesDTO = roles.Select(r => new RoleDTO { Id = r.RoleId, Name = r.Role.Name }).ToList<RoleDTO>();
+            return Ok(rolesDTO);
+        }
+        [Authorize]
         [HttpPost("{id}/Roles")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -126,6 +146,30 @@ namespace UsersAdmin.Controllers
 
             var userRoleToAdd = userRoleDTO.ToModel();
             _DbContext.UserRole.Add(userRoleToAdd);
+            await _DbContext.SaveChangesAsync();
+
+            return NoContent();
+        }
+        [Authorize]
+        [HttpDelete("{uid}/Roles/{rid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> RemoveRole(int uid, int rid)
+        {
+            var user = await _DbContext.User.FindAsync(uid);
+            if (user == null)
+                return NotFound();
+
+            var role = await _DbContext.Role.FindAsync(rid);
+            if (user == null)
+                return NotFound();
+
+            var userRole = await _DbContext.UserRole.FindAsync(uid, rid);
+            if (userRole == null)
+                return NotFound();
+            
+            _DbContext.UserRole.Remove(userRole);
             await _DbContext.SaveChangesAsync();
 
             return NoContent();
@@ -165,11 +209,11 @@ namespace UsersAdmin.Controllers
 
         public static UserDTO ToDTO(this User user)
         {
-            List<RoleDTO> roles = null;
-            if (user.UserRole != null)
-            {
-                roles = user.UserRole.Select(r => new RoleDTO { Id = r.RoleId, Name = r.Role.Name }).ToList<RoleDTO>();
-            }
+            // List<RoleDTO> roles = null;
+            // if (user.UserRole != null)
+            // {
+            //     roles = user.UserRole.Select(r => new RoleDTO { Id = r.RoleId, Name = r.Role.Name }).ToList<RoleDTO>();
+            // }
 
             return new UserDTO
             {
@@ -178,8 +222,8 @@ namespace UsersAdmin.Controllers
                 Name = user.Name,
                 Email = user.Email,
                 Password = user.Password,
-                Roles = roles
+                //Roles = roles
             };
-        }        
+        }
     }
 }

@@ -1,16 +1,33 @@
-GET http://localhost:5000/users HTTP/1.1
-
-###
-GET https://localhost:5001/users/1 HTTP/1.1
-
-###
-POST https://localhost:5001/users/2/roles HTTP/1.1
+POST https://localhost:5001/login HTTP/1.1
 Content-Type: application/json
 
 {
-    "UserId": 2,
+    "Login": "Admin",
+    "Password": "0123456789"
+}
+###
+GET http://localhost:5000/users HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJuYmYiOjE2MDQ0OTk0MjksImV4cCI6MTYwNTA5OTQyOSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.ZwqXwLF9m6DeJFpL6RbcZnhuTi751C9R7CgoM-hVndE
+
+###
+GET https://localhost:5001/users/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJuYmYiOjE2MDQ0OTk0MjksImV4cCI6MTYwNTA5OTQyOSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.ZwqXwLF9m6DeJFpL6RbcZnhuTi751C9R7CgoM-hVndE
+
+###
+GET https://localhost:5001/users/1/roles HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJuYmYiOjE2MDQ0OTk0MjksImV4cCI6MTYwNTA5OTQyOSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.ZwqXwLF9m6DeJFpL6RbcZnhuTi751C9R7CgoM-hVndE
+
+###
+POST https://localhost:5001/users/1/roles HTTP/1.1
+Content-Type: application/json
+
+{
+    "UserId": 1,
     "RoleId": 4
 }
+###
+DELETE https://localhost:5001/users/1/roles/4 HTTP/1.1
+
 ###
 POST https://localhost:5001/users HTTP/1.1
 Content-Type: application/json
@@ -35,9 +52,11 @@ Content-Type: application/json
 }
 ###
 GET https://localhost:5001/roles HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJuYmYiOjE2MDQ0OTk0MjksImV4cCI6MTYwNTA5OTQyOSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.ZwqXwLF9m6DeJFpL6RbcZnhuTi751C9R7CgoM-hVndE
 
 ###
 GET https://localhost:5001/roles/1 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiQWRtaW4iLCJuYmYiOjE2MDQ0OTk0MjksImV4cCI6MTYwNTA5OTQyOSwiaXNzIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.ZwqXwLF9m6DeJFpL6RbcZnhuTi751C9R7CgoM-hVndE
 
 ###
 POST https://localhost:5001/roles HTTP/1.1
